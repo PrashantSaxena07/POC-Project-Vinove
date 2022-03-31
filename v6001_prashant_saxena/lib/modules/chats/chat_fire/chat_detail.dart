@@ -8,24 +8,24 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 import 'package:v6001_prashant_saxena/constants/color.dart';
 
 
-class ChatDetail extends StatefulWidget {
+class InboxScreen extends StatefulWidget {
   final friendUid;
   final friendName;
 
-  ChatDetail({Key? key, this.friendUid, this.friendName}) : super(key: key);
+  InboxScreen({Key? key, this.friendUid, this.friendName}) : super(key: key);
 
   @override
-  _ChatDetailState createState() => _ChatDetailState(friendUid, friendName);
+  _InboxScreenState createState() => _InboxScreenState(friendUid, friendName);
 }
 
-class _ChatDetailState extends State<ChatDetail> {
+class _InboxScreenState extends State<InboxScreen> {
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   final friendUid;
   final friendName;
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
   var chatDocId;
   var _textController = new TextEditingController();
-  _ChatDetailState(this.friendUid, this.friendName);
+  _InboxScreenState(this.friendUid, this.friendName);
   @override
   void initState() {
     super.initState();
@@ -53,21 +53,21 @@ class _ChatDetailState extends State<ChatDetail> {
     return IconButton(
         icon: const Icon(
           Icons.mood,
-          color: Color(0xFF00BFA5),
+          color: Colors.grey,
         ),
         onPressed: () => callEmoji());
   }
 
   Widget attachFile() {
     return IconButton(
-      icon: const Icon(Icons.attach_file, color: Color(0xFF00BFA5)),
+      icon: const Icon(Icons.attach_file, color: Colors.grey,),
       onPressed: () => callAttachFile(),
     );
   }
 
   Widget camera() {
     return IconButton(
-      icon: const Icon(Icons.photo_camera, color: Color(0xFF00BFA5)),
+      icon: const Icon(Icons.photo_camera, color: Colors.grey),
       onPressed: () => callCamera(),
     );
   }
@@ -82,6 +82,7 @@ class _ChatDetailState extends State<ChatDetail> {
   Widget sendIcon() {
     return const Icon(
       Icons.send,
+      size: 22,
       color: Colors.white,
     );
   }
@@ -159,30 +160,52 @@ class _ChatDetailState extends State<ChatDetail> {
             return Scaffold(
               appBar: AppBar(
                 backgroundColor: appBarColor,
-                actions: [
-                  Icon(Icons.videocam_rounded),
-                  SizedBox(
-                    width: 25,
+                title: Text(
+                  friendName,
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  softWrap: false,),
+                centerTitle: false,
+                leadingWidth: 70,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      CircleAvatar(
+                        child: Icon(Icons.person),
+                      ),
+                    ],
                   ),
-                  Icon(Icons.call),
-                  SizedBox(
-                    width: 25,
-                  ),
-                  Icon(Icons.more_vert),
-                ],
-                title: Row(
-                  children: [
-                    CircleAvatar(
-                      child: Icon(Icons.person),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(friendName),
-                  ],
                 ),
+
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.video_call),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.call),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.more_vert),
+                  ),
+                ],
               ),
-              body: SafeArea(
+              body: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/background1.jpg'),
+                      fit: BoxFit.cover
+                  ),
+                ),
                 child: Column(
                   children: [
                     Expanded(
@@ -198,19 +221,20 @@ class _ChatDetailState extends State<ChatDetail> {
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: ChatBubble(
                                 clipper: ChatBubbleClipper6(
-                                  nipSize: 0,
-                                  radius: 0,
+                                  nipSize: 5,
+                                  radius: 10,
                                   type: isSender(data['uid'].toString())
                                       ? BubbleType.sendBubble
                                       : BubbleType.receiverBubble,
                                 ),
                                 alignment: getAlignment(data['uid'].toString()),
-                                margin: EdgeInsets.only(top: 20),
+                                margin: EdgeInsets.only(top: 15),
                                 backGroundColor:
                                     isSender(data['uid'].toString())
-                                        ? Color(0xFF08C187)
-                                        : Color(0xffE7E7ED),
+                                        ? messageColor
+                                        : chatBarMessage,
                                 child: Container(
+
                                   constraints: BoxConstraints(
                                     maxWidth:
                                         MediaQuery.of(context).size.width * 0.7,
@@ -226,7 +250,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                                   color: isSender(data['uid']
                                                           .toString())
                                                       ? Colors.white
-                                                      : Colors.black),
+                                                      : Colors.white),
                                               maxLines: 100,
                                               overflow: TextOverflow.ellipsis)
                                         ],
@@ -246,7 +270,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                                 color: isSender(
                                                         data['uid'].toString())
                                                     ? Colors.white
-                                                    : Colors.black),
+                                                    : Colors.white),
                                           )
                                         ],
                                       )
@@ -260,30 +284,27 @@ class _ChatDetailState extends State<ChatDetail> {
                       ),
                     ),
 
-              Container(
-                margin: const EdgeInsets.all(12.0),
+                Container(
+                margin: const EdgeInsets.all(5.0),
                 height: 60,
                 child: Row(
                   children: [
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: chatBarMessage,
                           borderRadius: BorderRadius.circular(35.0),
-                          boxShadow: const [
-                            BoxShadow(
-                                offset: Offset(0, 2), blurRadius: 7, color: Colors.grey)
-                          ],
                         ),
                         child: Row(
                           children: [
                             moodIcon(),
                             Expanded(
                               child: TextField(
+                                cursorColor: tabColor,
                                 controller: _textController,
                                 decoration: InputDecoration(
                                     hintText: "Message",
-                                    hintStyle: TextStyle(color: Color(0xFF00BFA5)),
+                                    hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none),
                               ),
                             ),
@@ -295,16 +316,17 @@ class _ChatDetailState extends State<ChatDetail> {
                     ),
                     const SizedBox(width: 15),
                     Container(
+                      width: 42,
                       padding: const EdgeInsets.all(15.0),
                       decoration: const BoxDecoration(
-                          color: Color(0xFF00BFA5), shape: BoxShape.circle),
+                          color: tabColor, shape: BoxShape.circle),
                       child: InkWell(
                         child: sendIcon(),
                         onTap: () => sendMessage(_textController.text))
                       ),
                   ],
                 ),
-              ),
+                ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     //   children: [

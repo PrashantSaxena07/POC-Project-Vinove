@@ -104,15 +104,15 @@ class _MyAppState extends State<MyApp> {
 
           // home: const Splash(),
 
-          home: initScreen == 0 || initScreen == null
-              ? LandingScreen()
-              : MobileHome(),
+          // home: initScreen == 0 || initScreen == null
+          //     ? LandingScreen()
+          //     : MobileHome(),
 
 
-          // home: const Responsive(
-          //   mobile_homeLayout: MobileHome(),
-          //   web_homeLayout: WebHome(),
-          // ),
+          home: const Responsive(
+            mobile_homeLayout: MobileHome(),
+            web_homeLayout: WebHome(),
+          ),
 
 
           // home: Settings(),

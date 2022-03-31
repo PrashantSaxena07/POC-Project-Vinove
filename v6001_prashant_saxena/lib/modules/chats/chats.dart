@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:v6001_prashant_saxena/modules/chats/archived/screen_archived.dart';
+import 'package:v6001_prashant_saxena/modules/chats/screen_inbox.dart';
 import 'package:v6001_prashant_saxena/widgets/item_settingOption.dart';
 import '../../constants/color.dart';
 import '../../constants/data.dart';
@@ -19,7 +20,7 @@ class Chats extends StatelessWidget {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ChatDetail(
+            builder: (context) => InboxScreen(
                   friendName: name,
                   friendUid: uid,
                 )));
@@ -133,7 +134,7 @@ class Chats extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const ContactScreen(),
+                builder: (context) => const Inbox(),
               ),
             );
           }),
