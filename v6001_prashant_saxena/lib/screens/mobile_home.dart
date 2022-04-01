@@ -39,11 +39,11 @@ class _MobileHomeState extends State<MobileHome>
         child: Scaffold(
           appBar:
           AppBar(automaticallyImplyLeading: false,
-            backgroundColor: appBarColor,
+            backgroundColor: Theme.of(context).appBarTheme.color,
             title: Text(
               Strings.of(context)!.WhatsApp,
               style: TextStyle(
-                color: Colors.grey,
+                color: Theme.of(context).iconTheme.color,
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
               ),

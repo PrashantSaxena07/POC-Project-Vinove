@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -23,9 +24,14 @@ void main() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
-
   Preference.load().then((value) {
-    runApp(MyApp());
+    runApp(
+        MultiProvider(providers:[
+          ChangeNotifierProvider.value(value: ThemeProvider.initializer())
+        ], child: MyApp(
+
+        ),)
+    );
   });
 }
 
@@ -64,64 +70,50 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-
-      create: (context) => ThemeProvider(),
-      builder: (context, _) {
-
-        final themeProvider = Provider.of<ThemeProvider>(context);
-
-        return  MaterialApp(
-          title: 'WhatsApp Clone',
-          locale: _locale,
-          supportedLocales: [
-            Locale('en', ''),
-            Locale('fr', ''),
-          ],
-          localizationsDelegates: [
-            AppLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          localeResolutionCallback: (locale, supportedLocales) {
-            for (var supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale?.languageCode) {
-                _locale = supportedLocale;
-                return supportedLocale;
-              }
+    return Consumer<ThemeProvider>(builder: (context,theme, child){
+      return MaterialApp(
+        title: 'WhatsApp Clone',
+        locale: _locale,
+        supportedLocales: [
+          Locale('en', ''),
+          Locale('fr', ''),
+        ],
+        localizationsDelegates: [
+          AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        localeResolutionCallback: (locale, supportedLocales) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale?.languageCode) {
+              _locale = supportedLocale;
+              return supportedLocale;
             }
-            return supportedLocales.first;
-          },
-          debugShowCheckedModeBanner: false,
-          themeMode: themeProvider.themeMode,
-          theme: MyThemes.lightTheme,
-          darkTheme: MyThemes.darkTheme,
+          }
+          return supportedLocales.first;
+        },
+        debugShowCheckedModeBanner: false,
+        theme:theme.themeMode,
+        // theme: ThemeData.dark().copyWith(
+        //   scaffoldBackgroundColor: backgroundColor,
+        // ),
 
-          // theme: ThemeData.dark().copyWith(
-          //   scaffoldBackgroundColor: backgroundColor,
-          // ),
+        // home: const Splash(),
 
-          // home: const Splash(),
-
-          // home: initScreen == 0 || initScreen == null
-          //     ? LandingScreen()
-          //     : MobileHome(),
+        // home: initScreen == 0 || initScreen == null
+        //     ? LandingScreen()
+        //     : MobileHome(),
 
 
-          home: const Responsive(
-            mobile_homeLayout: MobileHome(),
-            web_homeLayout: WebHome(),
-          ),
-
-
-          // home: Settings(),
-          // home: DummyContactScreen(),
-          // home: LandingScreen(),
-        );
-      },
-
-
-    );
+        // home: const Responsive(
+        //   mobile_homeLayout: MobileHome(),
+        //   web_homeLayout: WebHome(),
+        // ),
+        home: SettingsScreen(),
+        // home: DummyContactScreen(),
+        // home: LandingScreen(),
+      );
+    });
   }
 }

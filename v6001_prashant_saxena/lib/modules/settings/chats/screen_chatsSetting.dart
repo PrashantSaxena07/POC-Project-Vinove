@@ -49,12 +49,13 @@ class _ChatsSettingState extends State<ChatsSetting> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            //display tile
             ListTile(
               title: Text('Display', style: TextStyle(color: Colors.grey, fontSize: 14),),
               subtitle: Column(
                 children: [
                 SettingOption(
-                    title: Strings.of(context)!.Theme, leading: Icon(Icons.brightness_4, color: Colors.grey,), subtitle: 'Light, Dark',
+                    title: Strings.of(context)!.Theme, leading: Icon(Icons.brightness_4, color: Colors.grey,), subtitle: 'Light, Dark, Summer, Winter, Autumn',
                     onTap: (){
                       showDialog(context: context, builder: (context) =>
                           SimpleDialog(
@@ -64,19 +65,25 @@ class _ChatsSettingState extends State<ChatsSetting> {
                             ],
                           ),);
                     }),
-                SettingOption(title: 'Wallpaper', leading: Icon(Icons.wallpaper_rounded),),
+                SettingOption(
+                  title: 'Wallpaper', leading: Icon(Icons.wallpaper_rounded),),
               ],),
             ),
             Divider(indent: 5,endIndent: 5,),
+            //archive tile
             ListTile(
               title: Text(Strings.of(context)!.ArchivedSetting, style: TextStyle(color: Colors.grey, fontSize: 14),),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: SettingOption(title: Strings.of(context)!.KeepChatsArchived, leading: null, trailing: MyToogleButton(), subtitle: Strings.of(context)!.ArchivedScreenMsg,),
+                child: SettingOption(
+                  title: Strings.of(context)!.KeepChatsArchived,
+                  leading: null, trailing: MyToogleButton(),
+                  subtitle: Strings.of(context)!.ArchivedScreenMsg,),
               ),
 
             ),
             Divider(indent: 5,endIndent: 5,thickness: 1,),
+            //lang, back up...
             ListTile(
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 5),

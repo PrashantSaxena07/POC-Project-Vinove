@@ -7,7 +7,6 @@ import '../localisation/strings.dart';
 import '../prefrences.dart';
 
 class ThemeButton extends StatefulWidget {
-
   ThemeButton({Key? key}) : super(key: key);
 
   @override
@@ -16,53 +15,119 @@ class ThemeButton extends StatefulWidget {
 
 class _ThemeButtonState extends State<ThemeButton> {
   int _themeGroup = -1;
+  late ThemeProvider provider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    provider = Provider.of<ThemeProvider>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+      return Column(
+      children: [
+        //light theme
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          alignment: Alignment.center,
+          child: RadioListTile<int>(
+            value: 0,
+            groupValue: _themeGroup,
+            onChanged: (value) {
+              setState(() {
+                _themeGroup = value ?? 0;
+              });
 
-    return
-      Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            alignment: Alignment.center,
-            child: RadioListTile<int>(
-              value: 0,
-              groupValue: _themeGroup,
-              onChanged: (value) {
-                setState(() {
-                  _themeGroup = value ?? 0;
-                });
-                final provider = Provider.of<ThemeProvider>(context, listen: false);
-                     provider.toggleTheme(value==0?false:true);              },
-              title: Text(
-               Strings.of(context)!.Light,
-                style: TextStyle(color: Colors.white),
-              ),
+              provider.setTheme(AppTheme.light);
+            },
+            title: Text(
+              Strings.of(context)!.Light,
+              style: TextStyle(color: Colors.white),
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            alignment: Alignment.center,
-            child: RadioListTile<int>(
-              value: 1,
-              groupValue: _themeGroup,
-              onChanged: (value) {
-                setState(() {
-                  _themeGroup = value ?? 0;
-                });
-                final provider = Provider.of<ThemeProvider>(context, listen: false);
-                provider.toggleTheme(value==0?false:true);
-              },
-              title: Text(
-                Strings.of(context)!.Dark,
-                style: TextStyle(color: Colors.white),
-              ),
+        ),
+        //dark theme
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          alignment: Alignment.center,
+          child: RadioListTile<int>(
+            value: 1,
+            groupValue: _themeGroup,
+            onChanged: (value) {
+              setState(() {
+                _themeGroup = value ?? 0;
+              });
+
+              provider.setTheme(AppTheme.dark);
+            },
+            title: Text(
+              Strings.of(context)!.Dark,
+              style: TextStyle(color: Colors.white),
             ),
           ),
-        ],
-      );
+        ),
+        //summer theme... #theme3
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          alignment: Alignment.center,
+          child: RadioListTile<int>(
+            value: 2,
+            groupValue: _themeGroup,
+            onChanged: (value) {
+              setState(() {
+                _themeGroup = value ?? 0;
+              });
+              provider.setTheme(AppTheme.summer);
+            },
+            title: Text(
+              'Summer',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        //winter theme... #theme4
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          alignment: Alignment.center,
+          child: RadioListTile<int>(
+            value: 3,
+            groupValue: _themeGroup,
+            onChanged: (value) {
+              setState(() {
+                _themeGroup = value ?? 0;
+              });
+              provider.setTheme(AppTheme.winter);
+            },
+            title: Text(
+              'Winter',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        //autumn theme... #theme5
+        Container(
+          width: MediaQuery.of(context).size.width * 0.5,
+          alignment: Alignment.center,
+          child: RadioListTile<int>(
+            value: 4,
+            groupValue: _themeGroup,
+            onChanged: (value) {
+              setState(() {
+                _themeGroup = value ?? 0;
+              });
+              provider.setTheme(AppTheme.autumn);
+            },
+            title: Text(
+              'Autumn',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    );
     //
     // return Switch.adaptive(
     //   value: themeProvider.isDarkMode,
